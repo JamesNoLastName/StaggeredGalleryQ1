@@ -29,7 +29,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             StaggeredGalleryQ1Theme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    StaggeredPhotoGallery(modifier = Modifier.padding(innerPadding))
+                    StaggeredGallery(modifier = Modifier.padding(innerPadding))
                 }
             }
         }
@@ -37,34 +37,21 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun PhotoItem(photo: Photo) {
-    var isEnlarged by remember { mutableStateOf(false) }
-    val scaleFactor = if (isEnlarged) 2f else 1f
+fun PicRender(photo: Photo) {
     val imagePainter = painterResource(id = photo.fileName)
-    val originalWidth = 300.dp
-    val originalHeight = 200.dp
-
-    // Animate width and height using `animateDpAsState`
-    val width by animateDpAsState(targetValue = originalWidth * scaleFactor)
-    val height by animateDpAsState(targetValue = originalHeight * scaleFactor)
-
     Image(
         painter = imagePainter,
         contentDescription = photo.title,
         modifier = Modifier
-            .width(width)
             .fillMaxWidth()
-            .fillMaxHeight()
-            .clickable {
-                isEnlarged = !isEnlarged
-            },
+            .fillMaxHeight(),
         contentScale = ContentScale.Crop
     )
 }
 
 @Composable
-fun StaggeredPhotoGallery(modifier: Modifier = Modifier) {
-    val randomSizedPhotos = listOf(
+fun StaggeredGallery(modifier: Modifier = Modifier) {
+    val Photos = listOf(
         Photo(R.drawable.aero1, "Aero 1"),
         Photo(R.drawable.aero2, "Aero 2"),
         Photo(R.drawable.aero3, "Aero 3"),
@@ -86,9 +73,9 @@ fun StaggeredPhotoGallery(modifier: Modifier = Modifier) {
         verticalItemSpacing = 4.dp,
         horizontalArrangement = Arrangement.spacedBy(4.dp),
         content = {
-            items(randomSizedPhotos.size) { index ->
-                val photo = randomSizedPhotos[index]
-                PhotoItem(photo)
+            items(Photos.size) { index ->
+                val photo = Photos[index]
+                PicRender(photo)
             }
         },
         modifier = modifier.fillMaxSize()
@@ -97,8 +84,8 @@ fun StaggeredPhotoGallery(modifier: Modifier = Modifier) {
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewStaggeredPhotoGallery() {
+fun PreviewStaggeredGallery() {
     StaggeredGalleryQ1Theme {
-        StaggeredPhotoGallery()
+        StaggeredGallery()
     }
 }
